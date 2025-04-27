@@ -2,7 +2,7 @@ import os
 from typing import override
 from libsql_client import create_client, Client, ResultSet # pyright: ignore[reportMissingTypeStubs]
 
-from db.base import SessionStorage
+from src.db.base import SessionStorage
 
 class SQLiteSessionStorage(SessionStorage):
     def __init__(self):

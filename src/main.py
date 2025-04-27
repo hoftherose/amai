@@ -1,7 +1,6 @@
-# from store.app import app, mcp
+from src.store.app import app, mcp # pyright: ignore reportUnusedImport
 # from models.ollama_chat import response
-from db.sqlite import SQLiteSessionStorage
-import asyncio
+from src.db.sqlite import SQLiteSessionStorage
 
 
 async def main():
@@ -9,5 +8,3 @@ async def main():
     if await sqlite.ping():
         print("ok")
 
-if __name__=="__main__":
-    asyncio.run(main())
