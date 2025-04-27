@@ -1,7 +1,7 @@
 services:
-    api:
+    amai:
         build: .
-        container_name: amai
+        container_name: shop
         env_file: .env
         ports:
             - '8000:8000'
