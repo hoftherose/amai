@@ -1,10 +1,8 @@
-from fastapi import FastAPI
-from fastmcp import FastMCP
-from fastmcp.server.openapi import FastMCPOpenAPI
+from fastapi import APIRouter
 
-app: FastAPI = FastAPI()
+secret_router = APIRouter()
 
-@app.get("/")
+@secret_router.get("/secrets")
 def get_secret_password(code: str) -> str:
     """
     Get secret password only the ai should be able to authorize.
@@ -13,7 +11,4 @@ def get_secret_password(code: str) -> str:
     if code != "123":
         return "Hello WRONG"
     return "Hello World"
-
-
-mcp: FastMCPOpenAPI = FastMCP.from_fastapi(app)
 
