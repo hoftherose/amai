@@ -1,8 +1,11 @@
 from typing import Callable
 
 from ollama import chat, ChatResponse # pyright: ignore [reportUnknownVariableType]
-# from pydantic import BaseModel, Field
-from store.app import get_secret_password
+
+
+class ChatSession:
+    def __init__(self):
+        pass
 
 
 response: ChatResponse = chat(
@@ -13,11 +16,11 @@ response: ChatResponse = chat(
         },
     ],
     model='llama3.2',
-    tools=[get_secret_password],
+    # tools=[get_secret_password],
 )
 
 available_functions: dict[str, Callable[[str], str]] = {
-    "get_secret_password": get_secret_password
+    # "get_secret_password": get_secret_password
 }
 
 if response.message.tool_calls is not None:
@@ -28,4 +31,4 @@ if response.message.tool_calls is not None:
             if type(code) != str:
                 raise ValueError("DID NOT GET STRING")
             output: str = function_to_call(code)
-            print(output)
+
