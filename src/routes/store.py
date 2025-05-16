@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-secret_router = APIRouter()
+secret_router = APIRouter(prefix='/secrets')
 
-@secret_router.get("/secrets")
+@secret_router.get('')
 def get_secret_password(code: str) -> str:
     """
     Get secret password only the ai should be able to authorize.
