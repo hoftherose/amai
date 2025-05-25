@@ -1,6 +1,6 @@
 import os
 from typing import override
-from libsql_client import create_client, Client, ResultSet # pyright: ignore[reportMissingTypeStubs]
+from libsql_experimental import Connection, connect, Cursor
 
 from src.db.base import SessionStorage
 
@@ -8,13 +8,14 @@ class SQLiteSessionStorage(SessionStorage):
     def __init__(self):
         super().__init__()
         self.url: str = os.getenv("DB_URL", "")
+        self.conn: Connection = connect(self.url)
 
-    async def client(self) -> Client:
-        return create_client(self.url)
+    async def cursor(self) -> Cursor:
+        return self.conn.cursor()
 
     @override
     async def ping(self) -> bool:
-        client: Client = await self.client()
-        result: ResultSet = await client.execute("SELECT 1")
-        return len(result.rows) > 0
+        cur = await self.cursor()
+        result = cur.execute("SELECT 1")
+        return result.rowcount > 0
 
