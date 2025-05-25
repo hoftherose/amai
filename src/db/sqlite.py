@@ -19,3 +19,9 @@ class SQLiteSessionStorage(SessionStorage):
         result = cur.execute("SELECT 1")
         return result.rowcount > 0
 
+    @override
+    async def execute(self, query: str) -> list[tuple[str, ...]]:
+        cur = await self.cursor()
+        result = cur.execute(query)
+        return result.fetchall()
+
