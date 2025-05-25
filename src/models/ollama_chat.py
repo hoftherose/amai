@@ -1,6 +1,6 @@
 from typing import Callable
 
-from ollama import chat, ChatResponse # pyright: ignore [reportUnknownVariableType]
+from ollama import chat, ChatResponse
 
 
 class ChatSession:
