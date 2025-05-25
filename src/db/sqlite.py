@@ -20,7 +20,7 @@ class SQLiteSessionStorage(SessionStorage):
         return result.rowcount > 0
 
     @override
-    async def execute(self, query: str) -> list[tuple[str, ...]]:
+    async def execute(self, query: str) -> list[tuple[str | int | float, ...]]:
         cur = await self.cursor()
         result = cur.execute(query)
         return result.fetchall()
