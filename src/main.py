@@ -12,7 +12,7 @@ from src.db import DataSources
 # from src.db.sqlite import SQLiteSessionStorage
 
 class Settings(BaseSettings):
-    config_path: str = "~/.config/amai/config.json"
+    config_path: str = "./amai_config.json"
 
 class Config:
     def __init__(self, settings: Settings):
