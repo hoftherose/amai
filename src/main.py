@@ -8,11 +8,14 @@ from pydantic_settings import BaseSettings
 
 from src.routes import *
 from src.db import DataSources
+from src.utils import logger
 # from models.ollama_chat import response
 # from src.db.sqlite import SQLiteSessionStorage
 
 class Settings(BaseSettings):
     config_path: str = "./amai_config.json"
+
+settings = Settings()
 
 class Config:
     def __init__(self, settings: Settings):
@@ -26,22 +29,18 @@ class Config:
     def get_datasources(self) -> list[DataSources]:
         return []
 
-settings = Settings()
+config = Config(settings)
+"""
+Config Setup
+{
+    DataSources: [{...}],
+    Plugins: [{...}],
+    Models: [{...}],
+}
+"""
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
-    # Get Arg values
-    # Get Config
-    config = Config(settings)
-    print(config)
-    """
-    Config Setup
-    {
-        DataSources: [{...}],
-        Plugins: [{...}],
-        Models: [{...}],
-    }
-    """
     # Setup Database
     for sources in config.get_datasources():
         sources.setup()
