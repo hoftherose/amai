@@ -5,6 +5,9 @@ class DataSources:
     def setup(self):
         pass
 
+    def shutdown(self):
+        pass
+
 class SessionStorage:
     def __init__(self):
         pass
