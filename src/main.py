@@ -1,24 +1,38 @@
-import argparse
-from typing import override
 from contextlib import asynccontextmanager
+from typing import override
 
-from .db import DataSources
-
-from src.routes import *
 from fastapi import FastAPI
 from fastmcp import FastMCP
 from fastmcp.server.openapi import FastMCPOpenAPI
+from pydantic_settings import BaseSettings
+
+from src.routes import *
+from src.db import DataSources
 # from models.ollama_chat import response
 # from src.db.sqlite import SQLiteSessionStorage
+
+class Settings(BaseSettings):
+    config_path: str = "~/.config/amai/config.json"
+
+class Config:
+    def __init__(self, settings: Settings):
+        with open(settings.config_path, 'r') as f:
+            self.config: str = f.read()
+
+    @override
+    def __repr__(self) -> str:
+        return self.config
+
+    def get_datasources(self) -> list[DataSources]:
+        return []
+
+settings = Settings()
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     # Get Arg values
-    parser = argparse.ArgumentParser('')
-    _ = parser.add_argument('--config_path', help='Path to Amai configuration file', type=str)
     # Get Config
-    args = parser.parse_args()
-    config = Config(args.config_path) # pyright: ignore[reportAny]
+    config = Config(settings)
     print(config)
     """
     Config Setup
@@ -50,17 +64,4 @@ mcp: FastMCPOpenAPI = FastMCP.from_fastapi(app)
 #     sqlite = SQLiteSessionStorage()
 #     if await sqlite.ping():
 #         print("ok")
-
-class Config:
-    def __init__(self, path: str):
-        with open(path, 'r') as f:
-            self.config: str = f.read()
-
-    @override
-    def __repr__(self) -> str:
-        return self.config
-
-    def get_datasources(self) -> list[DataSources]:
-        return []
-
 
