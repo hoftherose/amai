@@ -1,3 +1,10 @@
+class DataSources:
+    def __init__(self):
+        pass
+
+    def setup(self):
+        pass
+
 class SessionStorage:
     def __init__(self):
         pass
