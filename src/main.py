@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-from typing import override
+from typing import TypedDict
 
 from fastapi import FastAPI
 from fastmcp import FastMCP
@@ -13,23 +13,27 @@ from src.utils import logger
 # from src.db.sqlite import SQLiteSessionStorage
 
 class Settings(BaseSettings):
-    config_path: str = "./amai_config.json"
+    config_path: str = "./config/amai.json"
+
+    def get_config(self) -> dict[str, list[DataSources]]:
+        with open(self.config_path, "r") as f:
+            temp: dict[str, any] = json.loads(f.read())
+            return {
+                "datasources": [DataSources(ds) for ds in temp["DataSources"]],
+            }
+
 
 settings = Settings()
 
-class Config:
-    def __init__(self, settings: Settings):
-        with open(settings.config_path, 'r') as f:
-            self.config: str = f.read()
+class Config(TypedDict):
+    datasources: list[DataSources]
+    # plugins: List[Plugins]
+    # models: List[Models]
 
-    @override
-    def __repr__(self) -> str:
-        return self.config
+config = Config(
+    datasources=[]
+)
 
-    def get_datasources(self) -> list[DataSources]:
-        return []
-
-config = Config(settings)
 """
 Config Setup
 {
@@ -43,7 +47,7 @@ Config Setup
 async def lifespan(_app: FastAPI):
     # Setup Database
     logger.info("Setting up datasources")
-    for sources in config.get_datasources():
+    for sources in config["datasources"]:
         sources.setup()
     # Setup MCP Plugins
     logger.info("Setting up MCP Plugins")
@@ -52,7 +56,7 @@ async def lifespan(_app: FastAPI):
     yield
     # Teardown Database
     logger.info("Tearing down datasources")
-    for sources in config.get_datasources():
+    for sources in config["datasources"]:
         sources.shutdown()
     logger.info("Tearing down MCP Plugins")
     # Teardown MCP Plugins

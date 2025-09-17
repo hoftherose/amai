@@ -1,6 +1,6 @@
 class DataSources:
-    def __init__(self):
-        pass
+    def __init__(self, ds_type: str):
+        self.datasource_type: str = ds_type
 
     def setup(self):
         pass
