@@ -20,9 +20,7 @@ class Settings(BaseSettings):
 
     def get_config(self) -> dict[str, list[DataSources]]:
         with open(self.config_path, "r") as f:
-            data: DataSourceData = DataSourceData(
-                json.load(f)
-            )
+            data: DataSourceData = DataSourceData(json.load(f))
             return {
                 "datasources": [DataSources(ds) for ds in data.DataSources],
             }

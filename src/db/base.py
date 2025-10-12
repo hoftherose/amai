@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class DataSourceData:
     DataSources: dict[str, str]
+
 
 class DataSources:
     def __init__(self, ds_type: str):

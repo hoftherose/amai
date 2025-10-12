@@ -8,6 +8,15 @@ from json.decoder import JSONDecodeError as JSONDecodeError, JSONDecoder as JSON
 from json.encoder import JSONEncoder as JSONEncoder
 
 __all__ = ["load", "JSONDecoder", "JSONDecodeError", "JSONEncoder"]
-def load(fp: SupportsRead[str | bytes], *, cls: type[JSONDecoder] | None = ..., object_hook: Callable[[dict[str, str]], str] | None = ..., parse_float: Callable[[str], float] | None = ..., parse_int: Callable[[str], int] | None = ..., parse_constant: Callable[[str], str] | None = ..., object_pairs_hook: Callable[[list[tuple[str, str]]], str] | None = ..., **kwds: dict[str, str]) -> dict[str, str]:
-    ...
 
+def load(
+    fp: SupportsRead[str | bytes],
+    *,
+    cls: type[JSONDecoder] | None = ...,
+    object_hook: Callable[[dict[str, str]], str] | None = ...,
+    parse_float: Callable[[str], float] | None = ...,
+    parse_int: Callable[[str], int] | None = ...,
+    parse_constant: Callable[[str], str] | None = ...,
+    object_pairs_hook: Callable[[list[tuple[str, str]]], str] | None = ...,
+    **kwds: dict[str, str],
+) -> dict[str, str]: ...
