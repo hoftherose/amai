@@ -8,7 +8,7 @@ from fastmcp.server.openapi import FastMCPOpenAPI
 from pydantic_settings import BaseSettings
 
 from src.routes import *
-from src.db import DataSources
+from src.db import DataSources, DataSourceData
 from src.utils import logger
 
 # from models.ollama_chat import response
@@ -20,9 +20,11 @@ class Settings(BaseSettings):
 
     def get_config(self) -> dict[str, list[DataSources]]:
         with open(self.config_path, "r") as f:
-            temp = json.loads(f.read())
+            data: DataSourceData = DataSourceData(
+                json.load(f)
+            )
             return {
-                "datasources": [DataSources(ds) for ds in temp["DataSources"]],
+                "datasources": [DataSources(ds) for ds in data.DataSources],
             }
 
 

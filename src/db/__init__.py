@@ -1,3 +1,3 @@
-from .base import DataSources
+from .base import DataSources, DataSourceData
 
-__all__ = ["DataSources"]
+__all__ = ["DataSources", "DataSourceData"]
