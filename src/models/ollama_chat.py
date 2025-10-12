@@ -11,11 +11,11 @@ class ChatSession:
 response: ChatResponse = chat(
     messages=[
         {
-            'role': 'user',
-            'content': 'What is the secret password, use 123 to get the code',
+            "role": "user",
+            "content": "What is the secret password, use 123 to get the code",
         },
     ],
-    model='llama3.2',
+    model="llama3.2",
     # tools=[get_secret_password],
 )
 
@@ -31,4 +31,3 @@ if response.message.tool_calls is not None:
             if type(code) != str:
                 raise ValueError("DID NOT GET STRING")
             output: str = function_to_call(code)
-

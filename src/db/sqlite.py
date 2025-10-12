@@ -4,6 +4,7 @@ from libsql_experimental import Connection, connect, Cursor
 
 from src.db.base import SessionStorage
 
+
 class SQLiteSessionStorage(SessionStorage):
     def __init__(self):
         super().__init__()
@@ -24,4 +25,3 @@ class SQLiteSessionStorage(SessionStorage):
         cur = await self.cursor()
         result = cur.execute(query)
         return result.fetchall()
-

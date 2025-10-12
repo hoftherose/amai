@@ -8,6 +8,7 @@ class DataSources:
     def shutdown(self):
         pass
 
+
 class SessionStorage:
     def __init__(self):
         pass
@@ -17,4 +18,3 @@ class SessionStorage:
 
     async def execute(self, _query: str) -> list[tuple[str | int | float, ...]]:
         raise NotImplementedError("Not implemented")
-

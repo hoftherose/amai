@@ -1,3 +1,4 @@
+import json
 from contextlib import asynccontextmanager
 from typing import TypedDict
 
@@ -9,15 +10,17 @@ from pydantic_settings import BaseSettings
 from src.routes import *
 from src.db import DataSources
 from src.utils import logger
+
 # from models.ollama_chat import response
 # from src.db.sqlite import SQLiteSessionStorage
+
 
 class Settings(BaseSettings):
     config_path: str = "./config/amai.json"
 
     def get_config(self) -> dict[str, list[DataSources]]:
         with open(self.config_path, "r") as f:
-            temp: dict[str, any] = json.loads(f.read())
+            temp = json.loads(f.read())
             return {
                 "datasources": [DataSources(ds) for ds in temp["DataSources"]],
             }
@@ -25,14 +28,14 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
+
 class Config(TypedDict):
     datasources: list[DataSources]
     # plugins: List[Plugins]
     # models: List[Models]
 
-config = Config(
-    datasources=[]
-)
+
+config = Config(datasources=[])
 
 """
 Config Setup
@@ -42,6 +45,7 @@ Config Setup
     Models: [{...}],
 }
 """
+
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
@@ -63,6 +67,7 @@ async def lifespan(_app: FastAPI):
     logger.info("Tearing down AI Models")
     # Teardown AI Models
 
+
 app: FastAPI = FastAPI(lifespan=lifespan)
 app.include_router(secret_router)
 app.include_router(health_router)
@@ -73,4 +78,3 @@ mcp: FastMCPOpenAPI = FastMCP.from_fastapi(app)
 #     sqlite = SQLiteSessionStorage()
 #     if await sqlite.ping():
 #         print("ok")
-
