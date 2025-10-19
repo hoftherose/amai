@@ -1,24 +1,27 @@
+from typing import Self, override
 from dataclasses import dataclass
+
+from src.utils.interfaces import AmaiBase
 
 
 @dataclass
-class DataSourceConfig:
-    datasources: dict[str, dict[str, str]]
-
-class DataSources:
-    def __init__(self, config: DataSourceConfig):
-        self.config: DataSourceConfig = config
-
-    def setup(self):
-        pass
-
-    def shutdown(self):
-        pass
+class AmaiDataSourceConfig:
+    connection_details: dict[str, str]
 
 
-class SessionStorage:
-    def __init__(self):
-        pass
+class AmaiDataSource(AmaiBase):
+    def __init__(self, config: AmaiDataSourceConfig):
+        self.config: AmaiDataSourceConfig = config
+
+    @override
+    @classmethod
+    def mult_parse_from_json(cls) -> list[Self]:
+        return []
+
+    @override
+    @classmethod
+    def parse_from_json(cls) -> Self:
+        return cls(ModelConfig({}))
 
     async def ping(self) -> bool:
         raise NotImplementedError("Not implemented")
