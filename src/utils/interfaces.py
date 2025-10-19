@@ -2,6 +2,7 @@ from typing import TypeVar
 
 AmaiType = TypeVar("AmaiType", bound="AmaiBase")
 
+
 class AmaiBase:
     def setup(self):
         pass

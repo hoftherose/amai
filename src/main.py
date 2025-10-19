@@ -4,7 +4,6 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastmcp import FastMCP
-from fastmcp.server.openapi import FastMCPOpenAPI
 from pydantic_settings import BaseSettings
 
 from src.models.base import Model
@@ -17,14 +16,15 @@ from src.utils import logger
 
 
 class Settings(BaseSettings):
-    config_path: str = os.getenv('CONFIG_PATH', './config/amai.json')
+    config_path: str = os.getenv("CONFIG_PATH", "./config/amai.json")
 
     def get_config(self) -> dict[str, list[AmaiDataSource] | list[Model]]:
         with open(self.config_path, "r") as f:
             # mcps: MCPConfig = MCPConfig(**json.load(f))
+            data = json.load(f)
             return {
-                "datasources": AmaiDataSource.mult_parse_from_json(**json.load(f)),
-                "models": Model.mult_parse_from_json(**json.load(f)),
+                "datasources": AmaiDataSource.mult_parse_from_json(**data),
+                "models": Model.mult_parse_from_json(**data),
                 # "mcp": [DataSources(ai) for ai in data.MCP],
             }
 
@@ -68,8 +68,8 @@ async def lifespan(_app: FastAPI):
     # Teardown AI Models
 
 
-app: FastAPI = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan=lifespan)
 app.include_router(secret_router)
 app.include_router(health_router)
 
-mcp: FastMCPOpenAPI = FastMCP.from_fastapi(app)
+mcp = FastMCP.from_fastapi(app)
