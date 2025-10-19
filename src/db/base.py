@@ -21,7 +21,7 @@ class AmaiDataSource(AmaiBase):
     @override
     @classmethod
     def parse_from_json(cls) -> Self:
-        return cls(ModelConfig({}))
+        return cls(AmaiDataSourceConfig({}))
 
     async def ping(self) -> bool:
         raise NotImplementedError("Not implemented")

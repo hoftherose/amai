@@ -1,5 +1,6 @@
-from typing import Self
+from typing import TypeVar
 
+AmaiType = TypeVar("AmaiType", bound="AmaiBase")
 
 class AmaiBase:
     def setup(self):
@@ -9,9 +10,9 @@ class AmaiBase:
         pass
 
     @classmethod
-    def mult_parse_from_json(cls) -> list[Self]:
+    def mult_parse_from_json(cls: type[AmaiType]) -> list[AmaiType]:
         raise NotImplementedError("mult_parse_from_json not implemented")
 
     @classmethod
-    def parse_from_json(cls) -> Self:
+    def parse_from_json(cls: type[AmaiType]) -> AmaiType:
         raise NotImplementedError("parse_from_json not implemented")
