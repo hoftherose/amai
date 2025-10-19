@@ -1,14 +1,13 @@
-import os
 from typing import override
 from libsql import Cursor, connect, Connection
 
-from src.db.base import SessionStorage
+from src.db.base import AmaiDataSource, AmaiDataSourceConfig
 
 
-class SQLiteSessionStorage(SessionStorage):
-    def __init__(self):
-        super().__init__()
-        self.url: str = os.getenv("DB_URL", "")
+class SQLiteSessionStorage(AmaiDataSource):
+    def __init__(self, config: AmaiDataSourceConfig):
+        super().__init__(config)
+        self.url: str = self.config.connection_details.get("DB_URL", "")
         self.conn: Connection = connect(self.url)
 
     @override
