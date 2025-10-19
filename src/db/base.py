@@ -2,15 +2,12 @@ from dataclasses import dataclass
 
 
 @dataclass
-class DataSourceData:
-    DataSources: dict[str, str]
-    Models: dict[str, str]
-    MCP: dict[str, str]
-
+class DataSourceConfig:
+    datasources: dict[str, dict[str, str]]
 
 class DataSources:
-    def __init__(self, ds_type: str):
-        self.datasource_type: str = ds_type
+    def __init__(self, config: DataSourceConfig):
+        self.config: DataSourceConfig = config
 
     def setup(self):
         pass

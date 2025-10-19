@@ -6,8 +6,9 @@ from fastmcp import FastMCP
 from fastmcp.server.openapi import FastMCPOpenAPI
 from pydantic_settings import BaseSettings
 
+from src.models.interface import Model
 from src.routes import health_router, secret_router
-from src.db import DataSources, DataSourceData
+from src.db import DataSources, DataSourceConfig
 from src.utils import logger
 
 # from models.ollama_chat import response
@@ -17,13 +18,14 @@ from src.utils import logger
 class Settings(BaseSettings):
     config_path: str = "./config/amai.json"
 
-    def get_config(self) -> dict[str, list[DataSources]]:
-        # def get_config(self) -> dict[str, list[DataSources] | list[Models] | list[MCP]]:
+    def get_config(self) -> dict[str, list[DataSources] | list[Model]]:
         with open(self.config_path, "r") as f:
-            data: DataSourceData = DataSourceData(**json.load(f))
+            data: DataSourceConfig = DataSourceConfig(**json.load(f))
+            models: ModelConfig = ModelConfig(**json.load(f))
+            mcps: MCPConfig = MCPConfig(**json.load(f))
             return {
-                # "datasources": [DataSources(ds) for ds in data.DataSources],
-                "models": [DataSources(ai) for ai in data.Models],
+                "datasources": [DataSources(ds) for ds in data.datasources],
+                "models": [Model(ai) for ai in data.Models],
                 # "mcp": [DataSources(ai) for ai in data.MCP],
             }
 
