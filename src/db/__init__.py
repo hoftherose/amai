@@ -1,3 +1,3 @@
-from .base import DataSources, DataSourceConfig
+from .base import AmaiDataSource, AmaiDataSourceConfig
 
-__all__ = ["DataSources", "DataSourceConfig"]
+__all__ = ["AmaiDataSource", "AmaiDataSourceConfig"]

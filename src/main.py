@@ -1,4 +1,5 @@
 import json
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -6,9 +7,9 @@ from fastmcp import FastMCP
 from fastmcp.server.openapi import FastMCPOpenAPI
 from pydantic_settings import BaseSettings
 
-from src.models.interface import Model
+from src.models.base import Model
 from src.routes import health_router, secret_router
-from src.db import DataSources, DataSourceConfig
+from src.db import AmaiDataSource
 from src.utils import logger
 
 # from models.ollama_chat import response
@@ -16,16 +17,14 @@ from src.utils import logger
 
 
 class Settings(BaseSettings):
-    config_path: str = "./config/amai.json"
+    config_path: str = os.getenv('CONFIG_PATH', './config/amai.json')
 
-    def get_config(self) -> dict[str, list[DataSources] | list[Model]]:
+    def get_config(self) -> dict[str, list[AmaiDataSource] | list[Model]]:
         with open(self.config_path, "r") as f:
-            data: DataSourceConfig = DataSourceConfig(**json.load(f))
-            models: ModelConfig = ModelConfig(**json.load(f))
-            mcps: MCPConfig = MCPConfig(**json.load(f))
+            # mcps: MCPConfig = MCPConfig(**json.load(f))
             return {
-                "datasources": [DataSources(ds) for ds in data.datasources],
-                "models": [Model(ai) for ai in data.Models],
+                "datasources": AmaiDataSource.mult_parse_from_json(**json.load(f)),
+                "models": Model.mult_parse_from_json(**json.load(f)),
                 # "mcp": [DataSources(ai) for ai in data.MCP],
             }
 
