@@ -4,6 +4,8 @@ from dataclasses import dataclass
 @dataclass
 class DataSourceData:
     DataSources: dict[str, str]
+    Models: dict[str, str]
+    MCP: dict[str, str]
 
 
 class DataSources:
