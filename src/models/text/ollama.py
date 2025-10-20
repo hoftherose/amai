@@ -1,10 +1,22 @@
+from dataclasses import dataclass
 from typing import Callable
 
-from ollama import chat, ChatResponse
+from ollama import chat, ChatResponse, Client
+from ..base import Model, ModelConfig
 
+@dataclass
+class OllamaModelConfig(ModelConfig):
+    model: str = "llama3.2"
+    host: str = "127.0.0.1:11434"
+    system: str = ""
 
-class ChatSession:
-    def __init__(self):
+class OllamaModel(Model):
+    def __init__(self, config: OllamaModelConfig):
+        super().__init__(config)
+        self.client: Client = Client(host = config.host)
+        self.messages: list[dict[str, str]]
+
+    def get_client(self):
         pass
 
 

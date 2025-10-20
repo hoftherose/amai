@@ -11,7 +11,7 @@ class ModelConfig:
 class Model:
     def __init__(self, config: ModelConfig):
         self.config: ModelConfig = config
-        self.endpoint: ParseResult
+        self.host: ParseResult
 
     def setup(self):
         pass
