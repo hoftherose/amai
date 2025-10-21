@@ -5,7 +5,7 @@ from ollama import chat, ChatResponse, Client
 from ..base import Model, ModelConfig
 
 @dataclass
-class OllamaModelConfig(ModelConfig):
+class OllamaModelConfig(ModelConfig): pass
 
 class OllamaModel(Model):
     def __init__(self, config: OllamaModelConfig):
