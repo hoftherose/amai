@@ -9,8 +9,9 @@ class AmaiDataSourceConfig:
     connection_details: dict[str, str]
 
 
-class AmaiDataSource(AmaiBase):
+class AmaiDataSource(AmaiBase[AmaiDataSourceConfig]):
     def __init__(self, config: AmaiDataSourceConfig):
+        super().__init__(config)
         self.config: AmaiDataSourceConfig = config
 
     @override

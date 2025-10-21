@@ -6,40 +6,52 @@ from ..base import Model, ModelConfig
 
 @dataclass
 class OllamaModelConfig(ModelConfig):
-    model: str = "llama3.2"
-    host: str = "127.0.0.1:11434"
-    system: str = ""
 
 class OllamaModel(Model):
     def __init__(self, config: OllamaModelConfig):
         super().__init__(config)
-        self.client: Client = Client(host = config.host)
-        self.messages: list[dict[str, str]]
+        self.config: ModelConfig = config
+        self.client: Client = self.get_client()
+        self.messages: list[dict[str, str]] = []
+        self.last_response: ChatResponse
+        self._available_functions: dict[str, Callable[[str], str]] = {}
 
     def get_client(self):
-        pass
+        return Client(host = self.host.geturl())
+
+    def chat(self, message: str, tools: list[Callable[[str],str]] | None = None):
+        self.messages.append(
+            {
+                "role": "user",
+                "content": message,
+            }
+        )
+        self.last_response = chat(
+            messages=self.messages,
+            model=self.config.model,
+            tools=tools,
+        )
+        self.run_tool_calls()
+        return self.last_response
+
+    def run_tool_calls(self):
+        if (tool_calls := self.last_response.message.tool_calls) is not None:
+            for tool in tool_calls:
+                function_to_call = self.available_functions.get(tool.function.name)
+                if function_to_call:
+                    code = tool.function.arguments.get("code")
+                    if type(code) != str:
+                        raise ValueError("DID NOT GET STRING")
+                    output: str = function_to_call(code)
+                    self.messages.append({"role": "assistant", "content": f"The result is {output}."})
 
 
-response: ChatResponse = chat(
-    messages=[
-        {
-            "role": "user",
-            "content": "What is the secret password, use 123 to get the code",
-        },
-    ],
-    model="llama3.2",
-    # tools=[get_secret_password],
-)
+    @property
+    def available_functions(self) -> dict[str, Callable[[str], str]]:
+        """The available_functions property."""
+        return self._available_functions
 
-available_functions: dict[str, Callable[[str], str]] = {
-    # "get_secret_password": get_secret_password
-}
+    @available_functions.setter
+    def available_functions(self, value: dict[str, Callable[[str], str]]):
+        self._available_functions = value
 
-if response.message.tool_calls is not None:
-    for tool in response.message.tool_calls:
-        function_to_call = available_functions.get(tool.function.name)
-        if function_to_call:
-            code = tool.function.arguments.get("code")
-            if type(code) != str:
-                raise ValueError("DID NOT GET STRING")
-            output: str = function_to_call(code)

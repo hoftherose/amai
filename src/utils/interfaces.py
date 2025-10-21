@@ -1,9 +1,13 @@
-from typing import TypeVar
+from typing import TypeVar, Generic
 
-AmaiType = TypeVar("AmaiType", bound="AmaiBase")
+AmaiType = TypeVar("AmaiType", covariant=True)
+AmaiConfig = TypeVar("AmaiConfig")
 
 
-class AmaiBase:
+class AmaiBase(Generic[AmaiConfig]):
+    def __init__(self, config: AmaiConfig):
+        self.config: AmaiConfig = config
+
     def setup(self):
         pass
 
