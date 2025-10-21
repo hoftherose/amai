@@ -1,6 +1,8 @@
 from typing import Self, override
 from dataclasses import dataclass
 from urllib.parse import ParseResult, urlparse
+
+from fastapi import FastAPI
 from src.utils.interfaces import AmaiBase
 
 
@@ -18,13 +20,11 @@ class Model(AmaiBase[ModelConfig]):
         self.host: ParseResult
 
     @override
-    def setup(self):
-        pass
-        # if (endpoint := self.config.get("endpoint")) is not None:
-        #     self.endpoint = urlparse(endpoint)
+    def setup(self, app: FastAPI):
+        self.host = urlparse(self.config.host)
 
     @override
-    def shutdown(self):
+    def shutdown(self, app: FastAPI):
         pass
 
     @override

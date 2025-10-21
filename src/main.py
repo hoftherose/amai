@@ -44,7 +44,7 @@ Config Setup
 
 
 @asynccontextmanager
-async def lifespan(_app: FastAPI):
+async def lifespan(app: FastAPI):
     # Setup Database
     logger.info("Setting up datasources")
     # for sources in config["datasources"]:
@@ -54,7 +54,7 @@ async def lifespan(_app: FastAPI):
     # Setup AI Models
     logger.info("Setting up AI Models")
     for model in config["models"]:
-        model.setup()
+        model.setup(app)
     yield
     # Teardown Database
     logger.info("Tearing down datasources")
@@ -64,7 +64,7 @@ async def lifespan(_app: FastAPI):
     # Teardown MCP Plugins
     logger.info("Tearing down AI Models")
     for model in config["models"]:
-        model.shutdown()
+        model.shutdown(app)
     # Teardown AI Models
 
 

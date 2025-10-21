@@ -1,5 +1,7 @@
 from typing import TypeVar, Generic
 
+from fastapi import FastAPI
+
 AmaiType = TypeVar("AmaiType", covariant=True)
 AmaiConfig = TypeVar("AmaiConfig")
 
@@ -8,10 +10,10 @@ class AmaiBase(Generic[AmaiConfig]):
     def __init__(self, config: AmaiConfig):
         self.config: AmaiConfig = config
 
-    def setup(self):
+    def setup(self, app: FastAPI): # pyright: ignore [reportUnusedParameter]
         pass
 
-    def shutdown(self):
+    def shutdown(self, app: FastAPI): # pyright: ignore [reportUnusedParameter]
         pass
 
     @classmethod
