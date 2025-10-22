@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Self, override
+from typing import Self, override, Callable
 from dataclasses import dataclass
 from urllib.parse import ParseResult, urlparse
 
@@ -42,5 +42,5 @@ class Model(AmaiBase[ModelConfig], ABC):
         return cls(ModelConfig({}))
 
     @abstractmethod
-    def chat(self, message: str):
+    def chat(self, message: str, tools: list[Callable[[str], str]] | None = None):
         pass

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Callable
+from typing import Callable, override
 
 from ollama import chat, ChatResponse, Client
 from ..base import Model, ModelConfig
@@ -19,7 +19,8 @@ class OllamaModel(Model):
     def get_client(self):
         return Client(host = self.host.geturl())
 
-    def chat(self, message: str, tools: list[Callable[[str],str]] | None = None):
+    @override
+    def chat(self, message: str, tools: list[Callable[[str],str]] | None = None) -> ChatResponse:
         self.messages.append(
             {
                 "role": "user",
