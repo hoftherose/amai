@@ -3,6 +3,7 @@ from typing import Self, override, Callable
 from dataclasses import dataclass
 from urllib.parse import ParseResult, urlparse
 
+from ollama import ChatResponse
 from fastapi import FastAPI
 from src.utils.interfaces import AmaiBase
 
@@ -42,5 +43,5 @@ class Model(AmaiBase[ModelConfig], ABC):
         return cls(ModelConfig({}))
 
     @abstractmethod
-    def chat(self, message: str, tools: list[Callable[[str], str]] | None = None):
+    def chat(self, message: str, tools: list[Callable[[str], str]] | None = None) -> ChatResponse:
         pass
