@@ -12,7 +12,7 @@ class OllamaModel(Model):
         super().__init__(config)
         self.config: ModelConfig = config
         self.client: Client = self.get_client()
-        self.messages: list[dict[str, str]] = []
+        self.messages: list[dict[str, str]] = self.init_messages()
         self.last_response: ChatResponse
         self._available_functions: dict[str, Callable[[str], str]] = {}
 
@@ -55,3 +55,10 @@ class OllamaModel(Model):
     def available_functions(self, value: dict[str, Callable[[str], str]]):
         self._available_functions = value
 
+    def init_messages(self) -> list[dict[str, str]]:
+        if self.config.system_prompt != "":
+            return [{
+                "role": "system",
+                "content": self.config.system_prompt,
+            }]
+        return []
