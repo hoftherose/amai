@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from typing import Self, override
 from dataclasses import dataclass
 from urllib.parse import ParseResult, urlparse
@@ -15,7 +16,7 @@ class ModelConfig:
     system_prompt: str = ""
 
 
-class Model(AmaiBase[ModelConfig]):
+class Model(AmaiBase[ModelConfig], ABC):
     def __init__(self, config: ModelConfig):
         super().__init__(config)
         self.host: ParseResult
@@ -39,3 +40,7 @@ class Model(AmaiBase[ModelConfig]):
     @classmethod
     def parse_from_json(cls) -> Self:
         return cls(ModelConfig({}))
+
+    @abstractmethod
+    def chat(self, message: str):
+        pass
