@@ -9,15 +9,18 @@ from src.utils.interfaces import AmaiBase
 @dataclass
 class ModelConfig:
     config: dict[str, str]
+    name: str = ""
     model: str = "llama3.2"
     host: str = "127.0.0.1:11434"
-    system: str = ""
+    system_prompt: str = ""
 
 
 class Model(AmaiBase[ModelConfig]):
     def __init__(self, config: ModelConfig):
         super().__init__(config)
         self.host: ParseResult
+        self.name: str = config.name
+        self.model: str = config.model
 
     @override
     def setup(self, app: FastAPI):

@@ -6,8 +6,9 @@ from fastapi import FastAPI
 from fastmcp import FastMCP
 from pydantic_settings import BaseSettings
 
-from src.models.base import Model
+from src.models.base import Model, ModelConfig
 from src.routes import health_router, secret_router
+from src.routes.models import generate_model_router
 from src.db import AmaiDataSource
 from src.utils import logger
 
@@ -67,9 +68,14 @@ async def lifespan(app: FastAPI):
         model.shutdown(app)
     # Teardown AI Models
 
+def add_model_routes(app: FastAPI):
+    one_model = Model(ModelConfig(config={},name="test",system_prompt="You are a cat"))
+    one_model.setup(app)
+    app.include_router(generate_model_router(one_model))
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(secret_router)
 app.include_router(health_router)
+add_model_routes(app)
 
 mcp = FastMCP.from_fastapi(app)
