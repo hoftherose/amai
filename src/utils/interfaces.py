@@ -19,12 +19,12 @@ class AmaiBase(Generic[AmaiConfig], ABC):
     def shutdown(self, app: FastAPI):
         pass
 
-    @abstractmethod
     @classmethod
+    @abstractmethod
     def mult_parse_from_json(cls: type[AmaiType]) -> list[AmaiType]:
         raise NotImplementedError("mult_parse_from_json not implemented")
 
-    @abstractmethod
     @classmethod
+    @abstractmethod
     def parse_from_json(cls: type[AmaiType]) -> AmaiType:
         raise NotImplementedError("parse_from_json not implemented")
