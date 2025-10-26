@@ -69,10 +69,14 @@ async def lifespan(app: FastAPI):
         model.shutdown(app)
     # Teardown AI Models
 
+
 def add_model_routes(app: FastAPI):
-    one_model = OllamaModel(OllamaModelConfig(config={},name="test",system_prompt="You are a cat"))
+    one_model = OllamaModel(
+        OllamaModelConfig(config={}, name="test", system_prompt="You are a cat")
+    )
     one_model.setup(app)
     app.include_router(generate_model_router(one_model))
+
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(secret_router)

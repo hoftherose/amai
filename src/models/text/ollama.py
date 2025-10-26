@@ -4,8 +4,11 @@ from typing import Callable, override
 from ollama import chat, ChatResponse, Client
 from ..base import Model, ModelConfig
 
+
 @dataclass
-class OllamaModelConfig(ModelConfig): pass
+class OllamaModelConfig(ModelConfig):
+    pass
+
 
 class OllamaModel(Model):
     def __init__(self, config: OllamaModelConfig):
@@ -17,10 +20,12 @@ class OllamaModel(Model):
         self._available_functions: dict[str, Callable[[str], str]] = {}
 
     def get_client(self):
-        return Client(host = self.host.geturl())
+        return Client(host=self.host.geturl())
 
     @override
-    def chat(self, message: str, tools: list[Callable[[str],str]] | None = None) -> ChatResponse:
+    def chat(
+        self, message: str, tools: list[Callable[[str], str]] | None = None
+    ) -> ChatResponse:
         self.messages.append(
             {
                 "role": "user",
@@ -44,8 +49,9 @@ class OllamaModel(Model):
                     if type(code) != str:
                         raise ValueError("DID NOT GET STRING")
                     output: str = function_to_call(code)
-                    self.messages.append({"role": "assistant", "content": f"The result is {output}."})
-
+                    self.messages.append(
+                        {"role": "assistant", "content": f"The result is {output}."}
+                    )
 
     @property
     def available_functions(self) -> dict[str, Callable[[str], str]]:
@@ -58,8 +64,10 @@ class OllamaModel(Model):
 
     def init_messages(self) -> list[dict[str, str]]:
         if self.config.system_prompt != "":
-            return [{
-                "role": "system",
-                "content": self.config.system_prompt,
-            }]
+            return [
+                {
+                    "role": "system",
+                    "content": self.config.system_prompt,
+                }
+            ]
         return []

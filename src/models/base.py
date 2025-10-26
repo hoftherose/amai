@@ -43,5 +43,7 @@ class Model(AmaiBase[ModelConfig], ABC):
         return cls(ModelConfig({}))
 
     @abstractmethod
-    def chat(self, message: str, tools: list[Callable[[str], str]] | None = None) -> ChatResponse:
+    def chat(
+        self, message: str, tools: list[Callable[[str], str]] | None = None
+    ) -> ChatResponse:
         pass
